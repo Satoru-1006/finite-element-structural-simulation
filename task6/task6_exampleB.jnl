@@ -1,0 +1,324 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+del mdb.models['Model-1']
+mdb.Model(name='ExampleB_1Elem')
+mdb.models['ExampleB_1Elem'].ConstrainedSketch(name='__profile__', sheetSize=
+    2.0)
+mdb.models['ExampleB_1Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0), 
+    point2=(1.2, 0.0))
+mdb.models['ExampleB_1Elem'].Part(dimensionality=TWO_D_PLANAR, name='Beam', 
+    type=DEFORMABLE_BODY)
+mdb.models['ExampleB_1Elem'].parts['Beam'].BaseWire(sketch=
+    mdb.models['ExampleB_1Elem'].sketches['__profile__'])
+del mdb.models['ExampleB_1Elem'].sketches['__profile__']
+mdb.models['ExampleB_1Elem'].Material(name='Steel')
+mdb.models['ExampleB_1Elem'].materials['Steel'].Elastic(table=((210000000000.0, 
+    0.3), ))
+mdb.models['ExampleB_1Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['ExampleB_1Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['ExampleB_1Elem'].parts['Beam'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleB_1Elem'].parts['Beam'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['ExampleB_1Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['ExampleB_1Elem'].rootAssembly.Instance(dependent=ON, name='Beam-1', 
+    part=mdb.models['ExampleB_1Elem'].parts['Beam'])
+mdb.models['ExampleB_1Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['ExampleB_1Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleB_1Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['ExampleB_1Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleB_1Elem'].StaticStep(name='LoadStep', nlgeom=OFF, previous=
+    'Initial')
+mdb.models['ExampleB_1Elem'].DisplacementBC(createStepName='Initial', name=
+    'Encastre', region=
+    mdb.models['ExampleB_1Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, u2=0.0
+    , ur3=0.0)
+mdb.models['ExampleB_1Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension', region=
+    mdb.models['ExampleB_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_1Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load', region=
+    mdb.models['ExampleB_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_1Elem'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('S', 'U', 'RF', 'SF', 'SM'))
+#* Invalid variables are specified in an output request.  An output request 
+#* cannot be created in a step where some variables are invalid.
+del mdb.models['ExampleB_1Elem']
+mdb.Model(name='ExampleB_1Elem')
+mdb.models['ExampleB_1Elem'].ConstrainedSketch(name='__profile__', sheetSize=
+    2.0)
+mdb.models['ExampleB_1Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0), 
+    point2=(1.2, 0.0))
+mdb.models['ExampleB_1Elem'].Part(dimensionality=TWO_D_PLANAR, name='Beam', 
+    type=DEFORMABLE_BODY)
+mdb.models['ExampleB_1Elem'].parts['Beam'].BaseWire(sketch=
+    mdb.models['ExampleB_1Elem'].sketches['__profile__'])
+del mdb.models['ExampleB_1Elem'].sketches['__profile__']
+mdb.models['ExampleB_1Elem'].Material(name='Steel')
+mdb.models['ExampleB_1Elem'].materials['Steel'].Elastic(table=((210000000000.0, 
+    0.3), ))
+mdb.models['ExampleB_1Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['ExampleB_1Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['ExampleB_1Elem'].parts['Beam'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleB_1Elem'].parts['Beam'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['ExampleB_1Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['ExampleB_1Elem'].rootAssembly.Instance(dependent=ON, name='Beam-1', 
+    part=mdb.models['ExampleB_1Elem'].parts['Beam'])
+mdb.models['ExampleB_1Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['ExampleB_1Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleB_1Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['ExampleB_1Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleB_1Elem'].StaticStep(name='LoadStep', nlgeom=OFF, previous=
+    'Initial')
+mdb.models['ExampleB_1Elem'].DisplacementBC(createStepName='Initial', name=
+    'Encastre', region=
+    mdb.models['ExampleB_1Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, u2=0.0
+    , ur3=0.0)
+mdb.models['ExampleB_1Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension', region=
+    mdb.models['ExampleB_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_1Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load', region=
+    mdb.models['ExampleB_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_1Elem'].HistoryOutputRequest(createStepName='LoadStep', 
+    name='TipHistory', region=
+    mdb.models['ExampleB_1Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['ExampleB_1Elem'].parts['Beam'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=1.2)
+mdb.models['ExampleB_1Elem'].parts['Beam'].setElementType(elemTypes=(ElemType(
+    elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['ExampleB_1Elem'].parts['Beam'].edges.getSequenceFromMask(mask=(
+    '[#1 ]', ), ), ))
+mdb.models['ExampleB_1Elem'].parts['Beam'].generateMesh()
+mdb.Job(description='Task 6 Example B, 1 beam elements', explicitPrecision=
+    SINGLE, model='ExampleB_1Elem', multiprocessingMode=DEFAULT, name=
+    'ExampleB_1Elem', nodalOutputPrecision=SINGLE, numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+mdb.Model(name='ExampleB_2Elem')
+mdb.models['ExampleB_2Elem'].ConstrainedSketch(name='__profile__', sheetSize=
+    2.0)
+mdb.models['ExampleB_2Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0), 
+    point2=(1.2, 0.0))
+mdb.models['ExampleB_2Elem'].Part(dimensionality=TWO_D_PLANAR, name='Beam', 
+    type=DEFORMABLE_BODY)
+mdb.models['ExampleB_2Elem'].parts['Beam'].BaseWire(sketch=
+    mdb.models['ExampleB_2Elem'].sketches['__profile__'])
+del mdb.models['ExampleB_2Elem'].sketches['__profile__']
+mdb.models['ExampleB_2Elem'].Material(name='Steel')
+mdb.models['ExampleB_2Elem'].materials['Steel'].Elastic(table=((210000000000.0, 
+    0.3), ))
+mdb.models['ExampleB_2Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['ExampleB_2Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['ExampleB_2Elem'].parts['Beam'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleB_2Elem'].parts['Beam'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['ExampleB_2Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['ExampleB_2Elem'].rootAssembly.Instance(dependent=ON, name='Beam-1', 
+    part=mdb.models['ExampleB_2Elem'].parts['Beam'])
+mdb.models['ExampleB_2Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['ExampleB_2Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleB_2Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['ExampleB_2Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleB_2Elem'].StaticStep(name='LoadStep', nlgeom=OFF, previous=
+    'Initial')
+mdb.models['ExampleB_2Elem'].DisplacementBC(createStepName='Initial', name=
+    'Encastre', region=
+    mdb.models['ExampleB_2Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, u2=0.0
+    , ur3=0.0)
+mdb.models['ExampleB_2Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension', region=
+    mdb.models['ExampleB_2Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_2Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load', region=
+    mdb.models['ExampleB_2Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_2Elem'].HistoryOutputRequest(createStepName='LoadStep', 
+    name='TipHistory', region=
+    mdb.models['ExampleB_2Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['ExampleB_2Elem'].parts['Beam'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=0.6)
+mdb.models['ExampleB_2Elem'].parts['Beam'].setElementType(elemTypes=(ElemType(
+    elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['ExampleB_2Elem'].parts['Beam'].edges.getSequenceFromMask(mask=(
+    '[#1 ]', ), ), ))
+mdb.models['ExampleB_2Elem'].parts['Beam'].generateMesh()
+mdb.Job(description='Task 6 Example B, 2 beam elements', explicitPrecision=
+    SINGLE, model='ExampleB_2Elem', multiprocessingMode=DEFAULT, name=
+    'ExampleB_2Elem', nodalOutputPrecision=SINGLE, numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+mdb.Model(name='ExampleB_4Elem')
+mdb.models['ExampleB_4Elem'].ConstrainedSketch(name='__profile__', sheetSize=
+    2.0)
+mdb.models['ExampleB_4Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0), 
+    point2=(1.2, 0.0))
+mdb.models['ExampleB_4Elem'].Part(dimensionality=TWO_D_PLANAR, name='Beam', 
+    type=DEFORMABLE_BODY)
+mdb.models['ExampleB_4Elem'].parts['Beam'].BaseWire(sketch=
+    mdb.models['ExampleB_4Elem'].sketches['__profile__'])
+del mdb.models['ExampleB_4Elem'].sketches['__profile__']
+mdb.models['ExampleB_4Elem'].Material(name='Steel')
+mdb.models['ExampleB_4Elem'].materials['Steel'].Elastic(table=((210000000000.0, 
+    0.3), ))
+mdb.models['ExampleB_4Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['ExampleB_4Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['ExampleB_4Elem'].parts['Beam'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleB_4Elem'].parts['Beam'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['ExampleB_4Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['ExampleB_4Elem'].rootAssembly.Instance(dependent=ON, name='Beam-1', 
+    part=mdb.models['ExampleB_4Elem'].parts['Beam'])
+mdb.models['ExampleB_4Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['ExampleB_4Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleB_4Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['ExampleB_4Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleB_4Elem'].StaticStep(name='LoadStep', nlgeom=OFF, previous=
+    'Initial')
+mdb.models['ExampleB_4Elem'].DisplacementBC(createStepName='Initial', name=
+    'Encastre', region=
+    mdb.models['ExampleB_4Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, u2=0.0
+    , ur3=0.0)
+mdb.models['ExampleB_4Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension', region=
+    mdb.models['ExampleB_4Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_4Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load', region=
+    mdb.models['ExampleB_4Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_4Elem'].HistoryOutputRequest(createStepName='LoadStep', 
+    name='TipHistory', region=
+    mdb.models['ExampleB_4Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['ExampleB_4Elem'].parts['Beam'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=0.3)
+mdb.models['ExampleB_4Elem'].parts['Beam'].setElementType(elemTypes=(ElemType(
+    elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['ExampleB_4Elem'].parts['Beam'].edges.getSequenceFromMask(mask=(
+    '[#1 ]', ), ), ))
+mdb.models['ExampleB_4Elem'].parts['Beam'].generateMesh()
+mdb.Job(description='Task 6 Example B, 4 beam elements', explicitPrecision=
+    SINGLE, model='ExampleB_4Elem', multiprocessingMode=DEFAULT, name=
+    'ExampleB_4Elem', nodalOutputPrecision=SINGLE, numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+mdb.Model(name='ExampleB_8Elem')
+mdb.models['ExampleB_8Elem'].ConstrainedSketch(name='__profile__', sheetSize=
+    2.0)
+mdb.models['ExampleB_8Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0), 
+    point2=(1.2, 0.0))
+mdb.models['ExampleB_8Elem'].Part(dimensionality=TWO_D_PLANAR, name='Beam', 
+    type=DEFORMABLE_BODY)
+mdb.models['ExampleB_8Elem'].parts['Beam'].BaseWire(sketch=
+    mdb.models['ExampleB_8Elem'].sketches['__profile__'])
+del mdb.models['ExampleB_8Elem'].sketches['__profile__']
+mdb.models['ExampleB_8Elem'].Material(name='Steel')
+mdb.models['ExampleB_8Elem'].materials['Steel'].Elastic(table=((210000000000.0, 
+    0.3), ))
+mdb.models['ExampleB_8Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['ExampleB_8Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['ExampleB_8Elem'].parts['Beam'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleB_8Elem'].parts['Beam'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['ExampleB_8Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['ExampleB_8Elem'].rootAssembly.Instance(dependent=ON, name='Beam-1', 
+    part=mdb.models['ExampleB_8Elem'].parts['Beam'])
+mdb.models['ExampleB_8Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['ExampleB_8Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleB_8Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['ExampleB_8Elem'].rootAssembly.instances['Beam-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleB_8Elem'].StaticStep(name='LoadStep', nlgeom=OFF, previous=
+    'Initial')
+mdb.models['ExampleB_8Elem'].DisplacementBC(createStepName='Initial', name=
+    'Encastre', region=
+    mdb.models['ExampleB_8Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, u2=0.0
+    , ur3=0.0)
+mdb.models['ExampleB_8Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension', region=
+    mdb.models['ExampleB_8Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_8Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load', region=
+    mdb.models['ExampleB_8Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleB_8Elem'].HistoryOutputRequest(createStepName='LoadStep', 
+    name='TipHistory', region=
+    mdb.models['ExampleB_8Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['ExampleB_8Elem'].parts['Beam'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=0.15)
+mdb.models['ExampleB_8Elem'].parts['Beam'].setElementType(elemTypes=(ElemType(
+    elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['ExampleB_8Elem'].parts['Beam'].edges.getSequenceFromMask(mask=(
+    '[#1 ]', ), ), ))
+mdb.models['ExampleB_8Elem'].parts['Beam'].generateMesh()
+mdb.Job(description='Task 6 Example B, 8 beam elements', explicitPrecision=
+    SINGLE, model='ExampleB_8Elem', multiprocessingMode=DEFAULT, name=
+    'ExampleB_8Elem', nodalOutputPrecision=SINGLE, numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+# Save by zxj on 2026_05_18-10.30.38; build 2026 2025_09_23-22.43.03 RELr428 206049
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['ExampleB_1Elem'].rootAssembly.regenerate()
+mdb.jobs['ExampleB_1Elem'].submit(consistencyChecking=False)
+mdb.jobs['ExampleB_1Elem'].waitForCompletion()
+mdb.jobs['ExampleB_2Elem'].submit(consistencyChecking=False)
+mdb.jobs['ExampleB_2Elem'].waitForCompletion()
+mdb.jobs['ExampleB_4Elem'].submit(consistencyChecking=False)
+mdb.jobs['ExampleB_4Elem'].waitForCompletion()
+mdb.jobs['ExampleB_8Elem'].submit(consistencyChecking=False)
+mdb.jobs['ExampleB_8Elem'].waitForCompletion()
+# Save by zxj on 2026_05_18-10.37.58; build 2026 2025_09_23-22.43.03 RELr428 206049

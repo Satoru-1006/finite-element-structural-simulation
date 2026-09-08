@@ -1,0 +1,428 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.Model(name='Task3_A_PortalFrame')
+mdb.models['Task3_A_PortalFrame'].ConstrainedSketch(name='__profile__', 
+    sheetSize=10.0)
+mdb.models['Task3_A_PortalFrame'].sketches['__profile__'].Line(point1=(0.0, 
+    0.0), point2=(0.0, 2.0))
+mdb.models['Task3_A_PortalFrame'].sketches['__profile__'].Line(point1=(0.0, 
+    2.0), point2=(3.0, 2.0))
+mdb.models['Task3_A_PortalFrame'].Part(dimensionality=TWO_D_PLANAR, name=
+    'PortalFrame', type=DEFORMABLE_BODY)
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].BaseWire(sketch=
+    mdb.models['Task3_A_PortalFrame'].sketches['__profile__'])
+del mdb.models['Task3_A_PortalFrame'].sketches['__profile__']
+mdb.models['Task3_A_PortalFrame'].Material(name='Steel')
+mdb.models['Task3_A_PortalFrame'].materials['Steel'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['Task3_A_PortalFrame'].RectangularProfile(a=0.00912870929175277, b=
+    0.219089023002066, name='EquivalentRect_A_I')
+mdb.models['Task3_A_PortalFrame'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='FrameSection', 
+    poissonRatio=0.3, profile='EquivalentRect_A_I', temperatureVar=LINEAR)
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), )), sectionName='FrameSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['Task3_A_PortalFrame'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Task3_A_PortalFrame'].rootAssembly.Instance(dependent=ON, name=
+    'PortalFrame-1', part=
+    mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'])
+mdb.models['Task3_A_PortalFrame'].rootAssembly.Set(name='N1_FIXED', vertices=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.instances['PortalFrame-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task3_A_PortalFrame'].rootAssembly.Set(name='N2', vertices=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.instances['PortalFrame-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task3_A_PortalFrame'].rootAssembly.Set(name='N3_LOAD', vertices=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.instances['PortalFrame-1'].vertices.getSequenceFromMask(
+    mask=('[#4 ]', ), ))
+mdb.models['Task3_A_PortalFrame'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['Task3_A_PortalFrame'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_N1', region=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.sets['N1_FIXED'], u1=0.0, 
+    u2=0.0, ur3=0.0)
+mdb.models['Task3_A_PortalFrame'].ConcentratedForce(cf1=20000.0, 
+    createStepName='LoadStep', name='Fx_20kN', region=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.sets['N3_LOAD'])
+mdb.models['Task3_A_PortalFrame'].ConcentratedForce(cf2=-10000.0, 
+    createStepName='LoadStep', name='Fy_minus10kN', region=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.sets['N3_LOAD'])
+mdb.models['Task3_A_PortalFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='N2History', region=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.sets['N2'], variables=('U1', 
+    'U2', 'UR3'))
+mdb.models['Task3_A_PortalFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='N3History', region=
+    mdb.models['Task3_A_PortalFrame'].rootAssembly.sets['N3_LOAD'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=10.0)
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), ), ))
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].generateMesh()
+mdb.Job(description='Task 3 Example A plane portal frame', model=
+    'Task3_A_PortalFrame', name='Task3_A_PortalFrame', numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+mdb.Model(name='Task3_B_Cantilever_1Elem')
+mdb.models['Task3_B_Cantilever_1Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['Task3_B_Cantilever_1Elem'].sketches['__profile__'].Line(point1=(
+    0.0, 0.0), point2=(1.2, 0.0))
+mdb.models['Task3_B_Cantilever_1Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever', type=DEFORMABLE_BODY)
+mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'].BaseWire(sketch=
+    mdb.models['Task3_B_Cantilever_1Elem'].sketches['__profile__'])
+del mdb.models['Task3_B_Cantilever_1Elem'].sketches['__profile__']
+mdb.models['Task3_B_Cantilever_1Elem'].Material(name='Steel')
+mdb.models['Task3_B_Cantilever_1Elem'].materials['Steel'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['Task3_B_Cantilever_1Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['Task3_B_Cantilever_1Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.DatumCsysByDefault(
+    CARTESIAN)
+mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.Instance(dependent=ON, 
+    name='Cantilever-1', part=
+    mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'])
+mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.Set(name='FIXED_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.Set(name='FREE_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task3_B_Cantilever_1Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['Task3_B_Cantilever_1Elem'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_End', region=
+    mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.sets['FIXED_END'], u1=
+    0.0, u2=0.0, ur3=0.0)
+mdb.models['Task3_B_Cantilever_1Elem'].ConcentratedForce(cf1=10000.0, 
+    createStepName='LoadStep', name='Axial_N_10kN', region=
+    mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_1Elem'].ConcentratedForce(cf2=-600.0, 
+    createStepName='LoadStep', name='Vertical_P_600N', region=
+    mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_1Elem'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='TipHistory', region=
+    mdb.models['Task3_B_Cantilever_1Elem'].rootAssembly.sets['FREE_END'], 
+    variables=('U1', 'U2', 'UR3'))
+mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=1.2)
+mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['Task3_B_Cantilever_1Elem'].parts['Cantilever'].generateMesh()
+mdb.Job(description='Task 3 Example B cantilever, 1 elements', model=
+    'Task3_B_Cantilever_1Elem', name='Task3_B_Cantilever_1Elem', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+mdb.Model(name='Task3_B_Cantilever_2Elem')
+mdb.models['Task3_B_Cantilever_2Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['Task3_B_Cantilever_2Elem'].sketches['__profile__'].Line(point1=(
+    0.0, 0.0), point2=(1.2, 0.0))
+mdb.models['Task3_B_Cantilever_2Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever', type=DEFORMABLE_BODY)
+mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'].BaseWire(sketch=
+    mdb.models['Task3_B_Cantilever_2Elem'].sketches['__profile__'])
+del mdb.models['Task3_B_Cantilever_2Elem'].sketches['__profile__']
+mdb.models['Task3_B_Cantilever_2Elem'].Material(name='Steel')
+mdb.models['Task3_B_Cantilever_2Elem'].materials['Steel'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['Task3_B_Cantilever_2Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['Task3_B_Cantilever_2Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.DatumCsysByDefault(
+    CARTESIAN)
+mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.Instance(dependent=ON, 
+    name='Cantilever-1', part=
+    mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'])
+mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.Set(name='FIXED_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.Set(name='FREE_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task3_B_Cantilever_2Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['Task3_B_Cantilever_2Elem'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_End', region=
+    mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.sets['FIXED_END'], u1=
+    0.0, u2=0.0, ur3=0.0)
+mdb.models['Task3_B_Cantilever_2Elem'].ConcentratedForce(cf1=10000.0, 
+    createStepName='LoadStep', name='Axial_N_10kN', region=
+    mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_2Elem'].ConcentratedForce(cf2=-600.0, 
+    createStepName='LoadStep', name='Vertical_P_600N', region=
+    mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_2Elem'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='TipHistory', region=
+    mdb.models['Task3_B_Cantilever_2Elem'].rootAssembly.sets['FREE_END'], 
+    variables=('U1', 'U2', 'UR3'))
+mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.6)
+mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['Task3_B_Cantilever_2Elem'].parts['Cantilever'].generateMesh()
+mdb.Job(description='Task 3 Example B cantilever, 2 elements', model=
+    'Task3_B_Cantilever_2Elem', name='Task3_B_Cantilever_2Elem', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+mdb.Model(name='Task3_B_Cantilever_4Elem')
+mdb.models['Task3_B_Cantilever_4Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['Task3_B_Cantilever_4Elem'].sketches['__profile__'].Line(point1=(
+    0.0, 0.0), point2=(1.2, 0.0))
+mdb.models['Task3_B_Cantilever_4Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever', type=DEFORMABLE_BODY)
+mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'].BaseWire(sketch=
+    mdb.models['Task3_B_Cantilever_4Elem'].sketches['__profile__'])
+del mdb.models['Task3_B_Cantilever_4Elem'].sketches['__profile__']
+mdb.models['Task3_B_Cantilever_4Elem'].Material(name='Steel')
+mdb.models['Task3_B_Cantilever_4Elem'].materials['Steel'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['Task3_B_Cantilever_4Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['Task3_B_Cantilever_4Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.DatumCsysByDefault(
+    CARTESIAN)
+mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.Instance(dependent=ON, 
+    name='Cantilever-1', part=
+    mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'])
+mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.Set(name='FIXED_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.Set(name='FREE_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task3_B_Cantilever_4Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['Task3_B_Cantilever_4Elem'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_End', region=
+    mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.sets['FIXED_END'], u1=
+    0.0, u2=0.0, ur3=0.0)
+mdb.models['Task3_B_Cantilever_4Elem'].ConcentratedForce(cf1=10000.0, 
+    createStepName='LoadStep', name='Axial_N_10kN', region=
+    mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_4Elem'].ConcentratedForce(cf2=-600.0, 
+    createStepName='LoadStep', name='Vertical_P_600N', region=
+    mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_4Elem'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='TipHistory', region=
+    mdb.models['Task3_B_Cantilever_4Elem'].rootAssembly.sets['FREE_END'], 
+    variables=('U1', 'U2', 'UR3'))
+mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.3)
+mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['Task3_B_Cantilever_4Elem'].parts['Cantilever'].generateMesh()
+mdb.Job(description='Task 3 Example B cantilever, 4 elements', model=
+    'Task3_B_Cantilever_4Elem', name='Task3_B_Cantilever_4Elem', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+mdb.Model(name='Task3_B_Cantilever_8Elem')
+mdb.models['Task3_B_Cantilever_8Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['Task3_B_Cantilever_8Elem'].sketches['__profile__'].Line(point1=(
+    0.0, 0.0), point2=(1.2, 0.0))
+mdb.models['Task3_B_Cantilever_8Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever', type=DEFORMABLE_BODY)
+mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'].BaseWire(sketch=
+    mdb.models['Task3_B_Cantilever_8Elem'].sketches['__profile__'])
+del mdb.models['Task3_B_Cantilever_8Elem'].sketches['__profile__']
+mdb.models['Task3_B_Cantilever_8Elem'].Material(name='Steel')
+mdb.models['Task3_B_Cantilever_8Elem'].materials['Steel'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['Task3_B_Cantilever_8Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20x40')
+mdb.models['Task3_B_Cantilever_8Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel', name='BeamSection', 
+    poissonRatio=0.3, profile='Rect_20x40', temperatureVar=LINEAR)
+mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='BeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.DatumCsysByDefault(
+    CARTESIAN)
+mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.Instance(dependent=ON, 
+    name='Cantilever-1', part=
+    mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'])
+mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.Set(name='FIXED_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.Set(name='FREE_END', 
+    vertices=
+    mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task3_B_Cantilever_8Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['Task3_B_Cantilever_8Elem'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_End', region=
+    mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.sets['FIXED_END'], u1=
+    0.0, u2=0.0, ur3=0.0)
+mdb.models['Task3_B_Cantilever_8Elem'].ConcentratedForce(cf1=10000.0, 
+    createStepName='LoadStep', name='Axial_N_10kN', region=
+    mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_8Elem'].ConcentratedForce(cf2=-600.0, 
+    createStepName='LoadStep', name='Vertical_P_600N', region=
+    mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['Task3_B_Cantilever_8Elem'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='TipHistory', region=
+    mdb.models['Task3_B_Cantilever_8Elem'].rootAssembly.sets['FREE_END'], 
+    variables=('U1', 'U2', 'UR3'))
+mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.15)
+mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['Task3_B_Cantilever_8Elem'].parts['Cantilever'].generateMesh()
+mdb.Job(description='Task 3 Example B cantilever, 8 elements', model=
+    'Task3_B_Cantilever_8Elem', name='Task3_B_Cantilever_8Elem', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+# Save by zxj on 2026_05_18-10.51.57; build 2026 2025_09_23-22.43.03 RELr428 206049
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Task3_A_PortalFrame'].rootAssembly.regenerate()
+# Save by zxj on 2026_05_18-11.21.58; build 2026 2025_09_23-22.43.03 RELr428 206049
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Task3_A_PortalFrame'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('CDISP', 'CF', 'CSTRESS', 'LE', 'PE', 'PEEQ', 'PEMAG', 'RF', 
+    'S', 'U', 'SF'))
+mdb.models['Task3_A_PortalFrame'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('S', 'PE', 'PEEQ', 'PEMAG', 'LE', 'U', 'RF', 'RT', 'RM', 'CF', 
+    'SF', 'SQEQ', 'TF', 'VF', 'ESF1', 'NFORC', 'NFORCSO', 'RBFOR', 'BF', 
+    'CORIOMAG', 'ROTAMAG', 'CENTMAG', 'CENTRIFMAG', 'GRAV', 'P', 'HP', 'TRSHR', 
+    'TRNOR', 'TRVEC', 'CSTRESS', 'CDISP'))
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].deleteMesh(regions=
+    mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].edges.getSequenceFromMask(
+    ('[#3 ]', ), ))
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].seedEdgeByNumber(
+    constraint=FINER, edges=
+    mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].edges.getSequenceFromMask(
+    ('[#3 ]', ), ), number=10)
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].generateMesh()
+mdb.models['Task3_A_PortalFrame'].rootAssembly.regenerate()
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].assignBeamSectionOrientation(
+    method=N1_COSINES, n1=(0.0, 0.0, -1.0), region=Region(
+    edges=mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), )))
+mdb.models['Task3_A_PortalFrame'].rootAssembly.regenerate()
+mdb.jobs['Task3_A_PortalFrame'].submit(consistencyChecking=OFF)
+mdb.jobs['Task3_A_PortalFrame']._Message(STARTED, {'phase': BATCHPRE_PHASE, 
+    'jobName': 'Task3_A_PortalFrame', 'clientHost': 'satoru', 'handle': 0})
+mdb.jobs['Task3_A_PortalFrame']._Message(HEADING, {
+    'heading': 'Task 3 Example A plane portal frame', 'phase': BATCHPRE_PHASE, 
+    'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(WARNING, {
+    'message': 'OUTPUT REQUEST VF IS NOT AVAILABLE FOR THIS TYPE OF ANALYSIS', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(WARNING, {
+    'message': 'STRAIN OUTPUT REQUEST LE IS NOT VALID FOR SOME ELEMENTS IN THIS ANALYSIS. THIS REQUEST IS SWITCHED TO THE STRAIN MEASURE, E.', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(ODB_FILE, {
+    'file': 'C:\\Users\\86198\\Task3_A_PortalFrame.odb', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(COMPLETED, {
+    'message': 'Analysis phase complete', 'phase': BATCHPRE_PHASE, 
+    'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(STARTED, {'phase': STANDARD_PHASE, 
+    'jobName': 'Task3_A_PortalFrame', 'clientHost': 'satoru', 'handle': 13896})
+mdb.jobs['Task3_A_PortalFrame']._Message(STEP, {'stepId': 1, 
+    'phase': STANDARD_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(ODB_FRAME, {'step': 0, 'frame': 0, 
+    'phase': STANDARD_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(MEMORY_ESTIMATE, {'memory': 24.0, 
+    'phase': STANDARD_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(PHYSICAL_MEMORY, {
+    'physical_memory': 16110.0, 'phase': STANDARD_PHASE, 
+    'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(MINIMUM_MEMORY, {
+    'minimum_memory': 17.0, 'phase': STANDARD_PHASE, 
+    'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(ODB_FRAME, {'step': 0, 'frame': 1, 
+    'phase': STANDARD_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(STATUS, {'step': 1, 'increment': 1, 
+    'attempts': 1, 'severe': 0, 'equilibrium': 1, 'iterations': 1, 
+    'totalTime': 1.0, 'stepTime': 1.0, 'timeIncrement': 1.0, 
+    'phase': STANDARD_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(END_STEP, {'stepId': 1, 
+    'phase': STANDARD_PHASE, 'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(COMPLETED, {
+    'message': 'Analysis phase complete', 'phase': STANDARD_PHASE, 
+    'jobName': 'Task3_A_PortalFrame'})
+mdb.jobs['Task3_A_PortalFrame']._Message(JOB_COMPLETED, {
+    'time': 'Mon May 18 11:33:00 2026', 'jobName': 'Task3_A_PortalFrame'})
+mdb.models['Task3_A_PortalFrame'].parts['PortalFrame'].generateMesh()
+# Save by zxj on 2026_05_18-13.13.44; build 2026 2025_09_23-22.43.03 RELr428 206049

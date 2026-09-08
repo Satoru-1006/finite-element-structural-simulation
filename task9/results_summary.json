@@ -1,0 +1,41 @@
+{
+  "parameters": {
+    "L_m": 1.0,
+    "H_m": 0.4,
+    "t_m": 0.01,
+    "E_Pa": 210000000000.0,
+    "nu": 0.3,
+    "q_Pa": 100000000.0,
+    "mesh_size_m": 0.05,
+    "element_type": "CPS3",
+    "analysis": "Static General, plane stress"
+  },
+  "mesh": {
+    "node_count": 189,
+    "element_count": 320,
+    "right_edge_node_count": 9
+  },
+  "load": {
+    "equivalent_total_force_N": 400000.0059604645,
+    "expected_total_force_N": 400000.0
+  },
+  "theory": {
+    "sigma_x_Pa": 100000000.0,
+    "sigma_y_Pa": 0.0,
+    "tau_xy_Pa": 0.0,
+    "epsilon_x": 0.0004761904761904762,
+    "epsilon_y": -0.00014285714285714287,
+    "gamma_xy": 0.0,
+    "u_right_m": 0.0004761904761904762
+  },
+  "abaqus_results": {
+    "U1_max_m": 0.0004743839428388635,
+    "U1_right_avg_m": 0.0004733363377319679,
+    "U1_right_error_percent": 0.5993690762867374,
+    "S11_mid_avg_Pa": 100179205.15451367,
+    "S11_mid_error_percent": 0.17920515451367197,
+    "left_region_abs_avg_S11_Pa": 99999998.45990987,
+    "left_region_abs_avg_S22_Pa": 12749986.6952692,
+    "left_region_abs_avg_S12_Pa": 4817509.9267440345
+  }
+}

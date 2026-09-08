@@ -1,0 +1,7 @@
+"metric","boundary","value"
+"max sigma[x]","Uniform tension",100
+"max |sigma[y]|","Uniform tension",0
+"max |tau[xy]|","Uniform tension",0
+"max sigma[x]","Fully fixed",128.546577380952
+"max |sigma[y]|","Fully fixed",24.0568973214286
+"max |tau[xy]|","Fully fixed",8.97818877301484

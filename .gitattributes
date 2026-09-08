@@ -1,0 +1,19 @@
+# Preserve solver databases, documents and course packages as downloadable binary artefacts.
+*.cae binary
+*.odb binary
+*.docx binary
+*.pdf binary
+*.tiff binary
+*.7z binary
+*.zip binary
+*.dat binary
+*.msg binary
+*.sta binary
+*.prt binary
+*.com binary
+*.ipm binary
+*.jnl binary
+*.rpy binary
+*.rec binary
+*.SMABulk binary
+

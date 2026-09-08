@@ -1,0 +1,335 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.Model(name='SecondPart_B_1Elem')
+mdb.models['SecondPart_B_1Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['SecondPart_B_1Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0)
+    , point2=(1.2, 0.0))
+mdb.models['SecondPart_B_1Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever_20x40', type=DEFORMABLE_BODY)
+mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].BaseWire(sketch=
+    mdb.models['SecondPart_B_1Elem'].sketches['__profile__'])
+del mdb.models['SecondPart_B_1Elem'].sketches['__profile__']
+mdb.models['SecondPart_B_1Elem'].Material(name='Steel_E210GPa')
+mdb.models['SecondPart_B_1Elem'].materials['Steel_E210GPa'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['SecondPart_B_1Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20mm_40mm')
+mdb.models['SecondPart_B_1Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210GPa', name=
+    'RectBeamSection', poissonRatio=0.3, profile='Rect_20mm_40mm', 
+    temperatureVar=LINEAR)
+mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='RectBeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['SecondPart_B_1Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['SecondPart_B_1Elem'].rootAssembly.Instance(dependent=ON, name=
+    'Cantilever-1', part=
+    mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'])
+mdb.models['SecondPart_B_1Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['SecondPart_B_1Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['SecondPart_B_1Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['SecondPart_B_1Elem'].DisplacementBC(createStepName='Initial', name=
+    'Fixed_Left_End', region=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, 
+    u2=0.0, ur3=0.0)
+mdb.models['SecondPart_B_1Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension_N_10kN', region=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_1Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load_P_600N', region=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_1Elem'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('U', 'RF', 'S', 'SF', 'SM'))
+#* Invalid variables are specified in an output request.  An output request 
+#* cannot be created in a step where some variables are invalid.
+del mdb.models['SecondPart_B_1Elem']
+mdb.Model(name='SecondPart_B_1Elem')
+mdb.models['SecondPart_B_1Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['SecondPart_B_1Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0)
+    , point2=(1.2, 0.0))
+mdb.models['SecondPart_B_1Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever_20x40', type=DEFORMABLE_BODY)
+mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].BaseWire(sketch=
+    mdb.models['SecondPart_B_1Elem'].sketches['__profile__'])
+del mdb.models['SecondPart_B_1Elem'].sketches['__profile__']
+mdb.models['SecondPart_B_1Elem'].Material(name='Steel_E210GPa')
+mdb.models['SecondPart_B_1Elem'].materials['Steel_E210GPa'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['SecondPart_B_1Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20mm_40mm')
+mdb.models['SecondPart_B_1Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210GPa', name=
+    'RectBeamSection', poissonRatio=0.3, profile='Rect_20mm_40mm', 
+    temperatureVar=LINEAR)
+mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='RectBeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['SecondPart_B_1Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['SecondPart_B_1Elem'].rootAssembly.Instance(dependent=ON, name=
+    'Cantilever-1', part=
+    mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'])
+mdb.models['SecondPart_B_1Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['SecondPart_B_1Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['SecondPart_B_1Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['SecondPart_B_1Elem'].DisplacementBC(createStepName='Initial', name=
+    'Fixed_Left_End', region=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, 
+    u2=0.0, ur3=0.0)
+mdb.models['SecondPart_B_1Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension_N_10kN', region=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_1Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load_P_600N', region=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_1Elem'].HistoryOutputRequest(createStepName='LoadStep'
+    , name='FreeEnd_U', region=
+    mdb.models['SecondPart_B_1Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=1.2)
+mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['SecondPart_B_1Elem'].parts['Cantilever_20x40'].generateMesh()
+mdb.Job(description=
+    'Second part plane tension-bending cantilever, 1 B21 elements', model=
+    'SecondPart_B_1Elem', name='SecondPart_B_1Elem', numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+mdb.Model(name='SecondPart_B_2Elem')
+mdb.models['SecondPart_B_2Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['SecondPart_B_2Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0)
+    , point2=(1.2, 0.0))
+mdb.models['SecondPart_B_2Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever_20x40', type=DEFORMABLE_BODY)
+mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'].BaseWire(sketch=
+    mdb.models['SecondPart_B_2Elem'].sketches['__profile__'])
+del mdb.models['SecondPart_B_2Elem'].sketches['__profile__']
+mdb.models['SecondPart_B_2Elem'].Material(name='Steel_E210GPa')
+mdb.models['SecondPart_B_2Elem'].materials['Steel_E210GPa'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['SecondPart_B_2Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20mm_40mm')
+mdb.models['SecondPart_B_2Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210GPa', name=
+    'RectBeamSection', poissonRatio=0.3, profile='Rect_20mm_40mm', 
+    temperatureVar=LINEAR)
+mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='RectBeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['SecondPart_B_2Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['SecondPart_B_2Elem'].rootAssembly.Instance(dependent=ON, name=
+    'Cantilever-1', part=
+    mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'])
+mdb.models['SecondPart_B_2Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['SecondPart_B_2Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['SecondPart_B_2Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['SecondPart_B_2Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['SecondPart_B_2Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['SecondPart_B_2Elem'].DisplacementBC(createStepName='Initial', name=
+    'Fixed_Left_End', region=
+    mdb.models['SecondPart_B_2Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, 
+    u2=0.0, ur3=0.0)
+mdb.models['SecondPart_B_2Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension_N_10kN', region=
+    mdb.models['SecondPart_B_2Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_2Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load_P_600N', region=
+    mdb.models['SecondPart_B_2Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_2Elem'].HistoryOutputRequest(createStepName='LoadStep'
+    , name='FreeEnd_U', region=
+    mdb.models['SecondPart_B_2Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.6)
+mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['SecondPart_B_2Elem'].parts['Cantilever_20x40'].generateMesh()
+mdb.Job(description=
+    'Second part plane tension-bending cantilever, 2 B21 elements', model=
+    'SecondPart_B_2Elem', name='SecondPart_B_2Elem', numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+mdb.Model(name='SecondPart_B_4Elem')
+mdb.models['SecondPart_B_4Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['SecondPart_B_4Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0)
+    , point2=(1.2, 0.0))
+mdb.models['SecondPart_B_4Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever_20x40', type=DEFORMABLE_BODY)
+mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'].BaseWire(sketch=
+    mdb.models['SecondPart_B_4Elem'].sketches['__profile__'])
+del mdb.models['SecondPart_B_4Elem'].sketches['__profile__']
+mdb.models['SecondPart_B_4Elem'].Material(name='Steel_E210GPa')
+mdb.models['SecondPart_B_4Elem'].materials['Steel_E210GPa'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['SecondPart_B_4Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20mm_40mm')
+mdb.models['SecondPart_B_4Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210GPa', name=
+    'RectBeamSection', poissonRatio=0.3, profile='Rect_20mm_40mm', 
+    temperatureVar=LINEAR)
+mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='RectBeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['SecondPart_B_4Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['SecondPart_B_4Elem'].rootAssembly.Instance(dependent=ON, name=
+    'Cantilever-1', part=
+    mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'])
+mdb.models['SecondPart_B_4Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['SecondPart_B_4Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['SecondPart_B_4Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['SecondPart_B_4Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['SecondPart_B_4Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['SecondPart_B_4Elem'].DisplacementBC(createStepName='Initial', name=
+    'Fixed_Left_End', region=
+    mdb.models['SecondPart_B_4Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, 
+    u2=0.0, ur3=0.0)
+mdb.models['SecondPart_B_4Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension_N_10kN', region=
+    mdb.models['SecondPart_B_4Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_4Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load_P_600N', region=
+    mdb.models['SecondPart_B_4Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_4Elem'].HistoryOutputRequest(createStepName='LoadStep'
+    , name='FreeEnd_U', region=
+    mdb.models['SecondPart_B_4Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.3)
+mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['SecondPart_B_4Elem'].parts['Cantilever_20x40'].generateMesh()
+mdb.Job(description=
+    'Second part plane tension-bending cantilever, 4 B21 elements', model=
+    'SecondPart_B_4Elem', name='SecondPart_B_4Elem', numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+mdb.Model(name='SecondPart_B_8Elem')
+mdb.models['SecondPart_B_8Elem'].ConstrainedSketch(name='__profile__', 
+    sheetSize=2.0)
+mdb.models['SecondPart_B_8Elem'].sketches['__profile__'].Line(point1=(0.0, 0.0)
+    , point2=(1.2, 0.0))
+mdb.models['SecondPart_B_8Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Cantilever_20x40', type=DEFORMABLE_BODY)
+mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'].BaseWire(sketch=
+    mdb.models['SecondPart_B_8Elem'].sketches['__profile__'])
+del mdb.models['SecondPart_B_8Elem'].sketches['__profile__']
+mdb.models['SecondPart_B_8Elem'].Material(name='Steel_E210GPa')
+mdb.models['SecondPart_B_8Elem'].materials['Steel_E210GPa'].Elastic(table=((
+    210000000000.0, 0.3), ))
+mdb.models['SecondPart_B_8Elem'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rect_20mm_40mm')
+mdb.models['SecondPart_B_8Elem'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210GPa', name=
+    'RectBeamSection', poissonRatio=0.3, profile='Rect_20mm_40mm', 
+    temperatureVar=LINEAR)
+mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='RectBeamSection', thicknessAssignment=
+    FROM_SECTION)
+mdb.models['SecondPart_B_8Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['SecondPart_B_8Elem'].rootAssembly.Instance(dependent=ON, name=
+    'Cantilever-1', part=
+    mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'])
+mdb.models['SecondPart_B_8Elem'].rootAssembly.Set(name='FIXED_END', vertices=
+    mdb.models['SecondPart_B_8Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['SecondPart_B_8Elem'].rootAssembly.Set(name='FREE_END', vertices=
+    mdb.models['SecondPart_B_8Elem'].rootAssembly.instances['Cantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['SecondPart_B_8Elem'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['SecondPart_B_8Elem'].DisplacementBC(createStepName='Initial', name=
+    'Fixed_Left_End', region=
+    mdb.models['SecondPart_B_8Elem'].rootAssembly.sets['FIXED_END'], u1=0.0, 
+    u2=0.0, ur3=0.0)
+mdb.models['SecondPart_B_8Elem'].ConcentratedForce(cf1=10000.0, createStepName=
+    'LoadStep', name='Axial_Tension_N_10kN', region=
+    mdb.models['SecondPart_B_8Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_8Elem'].ConcentratedForce(cf2=-600.0, createStepName=
+    'LoadStep', name='Vertical_Load_P_600N', region=
+    mdb.models['SecondPart_B_8Elem'].rootAssembly.sets['FREE_END'])
+mdb.models['SecondPart_B_8Elem'].HistoryOutputRequest(createStepName='LoadStep'
+    , name='FreeEnd_U', region=
+    mdb.models['SecondPart_B_8Elem'].rootAssembly.sets['FREE_END'], variables=(
+    'U1', 'U2', 'UR3'))
+mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.15)
+mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'].setElementType(
+    elemTypes=(ElemType(elemCode=B21, elemLibrary=STANDARD), ), regions=(
+    mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['SecondPart_B_8Elem'].parts['Cantilever_20x40'].generateMesh()
+mdb.Job(description=
+    'Second part plane tension-bending cantilever, 8 B21 elements', model=
+    'SecondPart_B_8Elem', name='SecondPart_B_8Elem', numCpus=1, numDomains=1, 
+    type=ANALYSIS)
+# Save by zxj on 2026_05_20-10.47.23; build 2026 2025_09_23-22.43.03 RELr428 206049
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['SecondPart_B_1Elem'].submit(consistencyChecking=False)
+mdb.jobs['SecondPart_B_1Elem'].waitForCompletion()
+mdb.jobs['SecondPart_B_2Elem'].submit(consistencyChecking=False)
+mdb.jobs['SecondPart_B_2Elem'].waitForCompletion()
+mdb.jobs['SecondPart_B_4Elem'].submit(consistencyChecking=False)
+mdb.jobs['SecondPart_B_4Elem'].waitForCompletion()
+mdb.jobs['SecondPart_B_8Elem'].submit(consistencyChecking=False)
+mdb.jobs['SecondPart_B_8Elem'].waitForCompletion()
+mdb.models['SecondPart_B_1Elem'].rootAssembly.regenerate()
+mdb.models['SecondPart_B_8Elem'].rootAssembly.regenerate()
+mdb.models['SecondPart_B_2Elem'].rootAssembly.regenerate()
+# Save by zxj on 2026_05_20-11.24.10; build 2026 2025_09_23-22.43.03 RELr428 206049

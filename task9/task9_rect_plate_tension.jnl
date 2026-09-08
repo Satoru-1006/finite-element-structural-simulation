@@ -1,0 +1,122 @@
+# -*- coding: mbcs -*-
+from mesh import *
+from visualization import *
+mdb.Model(name='Task9_Rectangular_Plate_Tension')
+mdb.models['Task9_Rectangular_Plate_Tension'].ConstrainedSketch(name=
+    'plate_profile', sheetSize=2.0)
+mdb.models['Task9_Rectangular_Plate_Tension'].sketches['plate_profile'].rectangle(
+    point1=(0.0, 0.0), point2=(1.0, 0.4))
+mdb.models['Task9_Rectangular_Plate_Tension'].Part(dimensionality=TWO_D_PLANAR, 
+    name='Plate', type=DEFORMABLE_BODY)
+mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].BaseShell(sketch=
+    mdb.models['Task9_Rectangular_Plate_Tension'].sketches['plate_profile'])
+mdb.models['Task9_Rectangular_Plate_Tension'].Material(name=
+    'Steel_linear_elastic')
+mdb.models['Task9_Rectangular_Plate_Tension'].materials['Steel_linear_elastic'].Elastic(
+    table=((210000000000.0, 0.3), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].HomogeneousSolidSection(material=
+    'Steel_linear_elastic', name='Plane_stress_section', thickness=0.01)
+mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].Set(faces=
+    mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].faces.getSequenceFromMask(
+    mask=('[#1 ]', ), ), name='Plate_all')
+mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].SectionAssignment(
+    region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].sets['Plate_all']
+    , sectionName='Plane_stress_section')
+mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.05)
+mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].setMeshControls(
+    elemShape=TRI, regions=
+    mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].faces.getSequenceFromMask(
+    mask=('[#1 ]', ), ), technique=FREE)
+mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].setElementType(
+    elemTypes=(ElemType(elemCode=CPS3, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].faces.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'].generateMesh()
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.DatumCsysByDefault(
+    CARTESIAN)
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Instance(dependent=
+    ON, name='Plate-1', part=
+    mdb.models['Task9_Rectangular_Plate_Tension'].parts['Plate'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(edges=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].edges.getSequenceFromMask(
+    mask=('[#8 ]', ), ), name='LeftEdge')
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(edges=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].edges.getSequenceFromMask(
+    mask=('[#2 ]', ), ), name='RightEdge')
+mdb.models['Task9_Rectangular_Plate_Tension'].StaticStep(name='Load', nlgeom=
+    OFF, previous='Initial')
+mdb.models['Task9_Rectangular_Plate_Tension'].DisplacementBC(amplitude=UNSET, 
+    createStepName='Initial', distributionType=UNIFORM, fieldName='', 
+    localCsys=None, name='BC_Left_Fixed', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['LeftEdge']
+    , u1=0.0, u2=0.0, ur3=UNSET)
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_21', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#100000 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    25000.000372529, createStepName='Load', name='Load_Right_21', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_21'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_42', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0 #200 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    50000.0007450581, createStepName='Load', name='Load_Right_42', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_42'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_63', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0 #40000000 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    50000.0026077032, createStepName='Load', name='Load_Right_63', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_63'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_84', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0:2 #80000 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    50000.0007450581, createStepName='Load', name='Load_Right_84', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_84'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_105', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0:3 #100 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    49999.9970197678, createStepName='Load', name='Load_Right_105', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_105'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_126', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0:3 #20000000 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    50000.0044703484, createStepName='Load', name='Load_Right_126', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_126'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_147', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0:4 #40000 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    49999.9970197678, createStepName='Load', name='Load_Right_147', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_147'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_168', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0:5 #80 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    49999.9970197678, createStepName='Load', name='Load_Right_168', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_168'])
+mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.Set(name=
+    'RightNode_189', nodes=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.instances['Plate-1'].nodes.getSequenceFromMask(
+    mask=('[#0:5 #10000000 ]', ), ))
+mdb.models['Task9_Rectangular_Plate_Tension'].ConcentratedForce(cf1=
+    25000.0059604645, createStepName='Load', name='Load_Right_189', region=
+    mdb.models['Task9_Rectangular_Plate_Tension'].rootAssembly.sets['RightNode_189'])
+mdb.Job(description='Task 9 rectangular plane-stress plate tension', 
+    explicitPrecision=SINGLE, model='Task9_Rectangular_Plate_Tension', 
+    multiprocessingMode=DEFAULT, name='task9_rect_plate_tension', 
+    nodalOutputPrecision=FULL, numCpus=1, numDomains=1, type=ANALYSIS)
+# Save by zxj on 2026_06_03-10.54.32; build 2026 2025_09_23-22.43.03 RELr428 206049

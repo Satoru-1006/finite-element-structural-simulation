@@ -1,0 +1,6 @@
+Example C space frame section parameters
+A = 0.000706858347058 m^2
+Iy = 3.9760782022e-08 m^4
+Iz = 3.9760782022e-08 m^4
+J = 7.9521564044e-08 m^4
+nu = 0.3125

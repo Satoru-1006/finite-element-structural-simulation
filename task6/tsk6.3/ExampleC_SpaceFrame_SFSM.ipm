@@ -1,0 +1,15 @@
+<?xml version="1.0"?><msgwrapper><Started><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName><clientHost type="string">satoru</clientHost><handle type="integer">0</handle></Started>
+<Heading><heading type="string">Example C with CF CM E RF RM S U UR SF SM field output</heading><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Heading>
+<Odb_File><file type="string">C:\Users\86198\ExampleC_SpaceFrame_SFSM.odb</file><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Odb_File>
+<Completed><message type="string">Analysis phase complete</message><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Completed>
+<Started><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName><clientHost type="string">satoru</clientHost><handle type="integer">20776</handle></Started>
+<Step><stepId type="integer">1</stepId><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Step>
+<Odb_Frame><step type="integer">0</step><frame type="integer">0</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Odb_Frame>
+<MEMORY_ESTIMATE><memory type="float">24</memory><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></MEMORY_ESTIMATE>
+<PHYSICAL_MEMORY><physical_memory type="float">16110</physical_memory><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></PHYSICAL_MEMORY>
+<MINIMUM_MEMORY><minimum_memory type="float">17</minimum_memory><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></MINIMUM_MEMORY>
+<Odb_Frame><step type="integer">0</step><frame type="integer">1</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Odb_Frame>
+<Status><step type="integer">1</step><increment type="integer">1</increment><attempts type="integer">1</attempts><severe type="integer">0</severe><equilibrium type="integer">1</equilibrium><iterations type="integer">1</iterations><totalTime type="float">1</totalTime><stepTime type="float">1</stepTime><timeIncrement type="float">1</timeIncrement><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Status>
+<End_Step><stepId type="integer">1</stepId><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></End_Step>
+<Completed><message type="string">Analysis phase complete</message><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></Completed>
+<JOB_COMPLETED><time type="string">Thu May 21 00:37:09 2026</time><jobName type="string">ExampleC_SpaceFrame_SFSM</jobName></JOB_COMPLETED></msgwrapper>

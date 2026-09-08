@@ -1,0 +1,13 @@
+# Local machine/runtime state
+**/*.env
+**/*.excluded-local
+**/*.exe
+**/~$*
+**/*.app_cache
+**/__pycache__/
+**/*.pyc
+
+# Operating-system metadata
+Thumbs.db
+.DS_Store
+

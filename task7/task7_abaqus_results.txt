@@ -1,0 +1,14 @@
+Task 7 Abaqus result check
+ODB: C:\Users\86198\Desktop\task7\Task7_Axial_Bar_2Elem.odb
+Step: Axial_Load, final frame
+Nodal displacement U (mm):
+  node 1: U1 = 1.01499996936e-30, U2 = 0
+  node 2: U1 = 25.375, U2 = 0
+  node 3: U1 = 50.5, U2 = 0
+Reaction force RF (N), constrained DOFs:
+  node 1: RF1 = -1020000, RF2 = -0
+  node 2: RF1 = 0, RF2 = -0
+  node 3: RF1 = 0, RF2 = -0
+Element axial stress S11 (N/mm^2):
+  element 1: S11 = 10150
+  element 2: S11 = 10050

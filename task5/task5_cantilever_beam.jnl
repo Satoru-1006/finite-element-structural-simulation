@@ -1,0 +1,98 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models.changeKey(fromName='Model-1', toName='Task5_Cantilever_Beam')
+mdb.models['Task5_Cantilever_Beam'].Part(dimensionality=THREE_D, name=
+    'CantileverBeam_B31', type=DEFORMABLE_BODY)
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].WirePolyLine(
+    mergeType=IMPRINT, meshable=ON, points=((0.0, 0.0, 0.0), (1.0, 0.0, 0.0)))
+mdb.models['Task5_Cantilever_Beam'].Material(name='Steel_E_210GPa_nu_0p3')
+mdb.models['Task5_Cantilever_Beam'].materials['Steel_E_210GPa_nu_0p3'].Elastic(
+    table=((210000000000.0, 0.3), ))
+mdb.models['Task5_Cantilever_Beam'].RectangularProfile(a=0.02, b=0.04, name=
+    'Rectangular_20mm_by_40mm')
+mdb.models['Task5_Cantilever_Beam'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E_210GPa_nu_0p3', name=
+    'B31_Rectangular_Section', poissonRatio=0.3, profile=
+    'Rectangular_20mm_by_40mm', temperatureVar=LINEAR)
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='B31_Rectangular_Section', 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].assignBeamSectionOrientation(
+    method=N1_COSINES, n1=(0.0, 0.0, 1.0), region=Region(
+    edges=mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )))
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].Set(name=
+    'SET_FIXED_END', vertices=
+    mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].Set(name=
+    'SET_FREE_END', vertices=
+    mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].Set(edges=
+    mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), name='SET_BEAM_EDGE')
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.05)
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].setElementType(
+    elemTypes=(ElemType(elemCode=B31, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'].generateMesh()
+mdb.models['Task5_Cantilever_Beam'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Task5_Cantilever_Beam'].rootAssembly.Instance(dependent=ON, name=
+    'CantileverBeam_B31-1', part=
+    mdb.models['Task5_Cantilever_Beam'].parts['CantileverBeam_B31'])
+mdb.models['Task5_Cantilever_Beam'].StaticStep(description=
+    'Static analysis of B31 cantilever beam under vertical tip load', name=
+    'Step-1_Static_Load', nlgeom=OFF, previous='Initial')
+mdb.models['Task5_Cantilever_Beam'].EncastreBC(createStepName='Initial', name=
+    'BC_Left_End_Fixed', region=
+    mdb.models['Task5_Cantilever_Beam'].rootAssembly.instances['CantileverBeam_B31-1'].sets['SET_FIXED_END'])
+mdb.models['Task5_Cantilever_Beam'].ConcentratedForce(cf2=-1000.0, 
+    createStepName='Step-1_Static_Load', name='Load_Free_End_Downward_1000N', 
+    region=
+    mdb.models['Task5_Cantilever_Beam'].rootAssembly.instances['CantileverBeam_B31-1'].sets['SET_FREE_END'])
+mdb.models['Task5_Cantilever_Beam'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('S', 'U', 'RF'))
+mdb.models['Task5_Cantilever_Beam'].HistoryOutputRequest(createStepName=
+    'Step-1_Static_Load', name='H_Free_End_Displacement_Reaction', region=
+    mdb.models['Task5_Cantilever_Beam'].rootAssembly.instances['CantileverBeam_B31-1'].sets['SET_FREE_END']
+    , variables=('U1', 'U2', 'U3', 'RF1', 'RF2', 'RF3'))
+mdb.Job(contactPrint=OFF, description=
+    'Task5 accurate B31 cantilever beam analysis, SI units', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='Task5_Cantilever_Beam', 
+    modelPrint=OFF, name='Task5_Cantilever_Beam_Job', nodalOutputPrecision=
+    SINGLE, resultsFormat=ODB, scratch='', type=ANALYSIS, userSubroutine='')
+# Save by zxj on 2026_05_13-14.31.05; build 2026 2025_09_23-22.43.03 RELr428 206049
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['Task5_Cantilever_Beam_Job'].submit(consistencyChecking=OFF)
+mdb.jobs['Task5_Cantilever_Beam_Job'].waitForCompletion()
+# Save by zxj on 2026_05_13-14.31.25; build 2026 2025_09_23-22.43.03 RELr428 206049

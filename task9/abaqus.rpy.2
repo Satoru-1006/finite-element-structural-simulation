@@ -1,0 +1,40 @@
+# -*- coding: mbcs -*-
+#
+# Abaqus/CAE Release 2026 replay file
+# Internal Version: 2025_09_23-22.43.03 RELr428 206049
+# Run by zxj on Wed Jun  3 10:49:12 2026
+#
+
+# from driverUtils import executeOnCaeGraphicsStartup
+# executeOnCaeGraphicsStartup()
+#: Executing "onCaeGraphicsStartup()" in the site directory ...
+from abaqus import *
+from abaqusConstants import *
+session.Viewport(name='Viewport: 1', origin=(1.11979, 1.11979), width=164.833, 
+    height=111.083)
+session.viewports['Viewport: 1'].makeCurrent()
+from driverUtils import executeOnCaeStartup
+executeOnCaeStartup()
+#: Executing "onCaeStartup()" in the home directory ...
+#: =======================================================
+#: Abaqus MCP Plugin v4.0.0 (File IPC)
+#: =======================================================
+#: Home:   D:\mcp
+#: Abaqus: True
+#: Start:  mcp_start()     (background, recommended)
+#:         mcp_loop()      (blocking)
+#: Stop:   mcp_stop()
+#: Status: mcp_status()
+#: =======================================================
+execfile('C:/Users/86198/Desktop/task9/task9_abaqus_model.py', 
+    __main__.__dict__)
+#: The model "Task9_Rectangular_Plate_Tension" has been created.
+#* AttributeError: 'Model' object has no attribute 'fieldOutputRequests'
+#* File "C:/Users/86198/Desktop/task9/task9_abaqus_model.py", line 367, in 
+#* <module>
+#*     main()
+#* File "C:/Users/86198/Desktop/task9/task9_abaqus_model.py", line 356, in main
+#*     model, part, assembly, inst, job, total_force = make_model()
+#* File "C:/Users/86198/Desktop/task9/task9_abaqus_model.py", line 112, in 
+#* make_model
+#*     model.fieldOutputRequests["F-Output-1"].setValues(

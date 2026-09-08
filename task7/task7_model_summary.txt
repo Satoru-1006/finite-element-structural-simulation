@@ -1,0 +1,13 @@
+Task 7 axial bar Abaqus model summary
+Units: N, mm
+L = 1000 mm
+E = 200000 N/mm^2
+A = 100 mm^2
+P = 1e+06 N
+p0 = 20 N/mm
+Discretization: 2 equal T2D2 truss elements, nodes at 0, 500, 1000 mm
+Equivalent nodal distributed load per element end = 5000 N
+Applied nodal loads Fx: node1 5000 N, node2 10000 N, node3 1.005e+06 N
+Expected FE displacements: u1 = 0 mm, u2 = 25.375 mm, u3 = 50.5 mm
+Expected left reaction RF1 = -1020000 N
+Files: C:\Users\86198\Desktop\task7\Task7_Axial_Bar_2Elem.cae, C:\Users\86198\Desktop\task7\Task7_Axial_Bar_2Elem.inp

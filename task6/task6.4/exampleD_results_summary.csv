@@ -1,0 +1,8 @@
+free_end_U1_m,free_end_U2_m,free_end_U3_m,free_end_UR1_rad,free_end_UR2_rad,free_end_UR3_rad
+-1.4644899e-19,-0.0199501,-1.4438256e-17,0.018862808,2.1606163e-17,-0.029940965
+
+fixed_RF1_N,fixed_RF2_N,fixed_RF3_N,fixed_RM1_Nm,fixed_RM2_Nm,fixed_RM3_Nm
+9.549694e-12,500.0,2.570663e-26,-120.0,-7.1054274e-15,500.0
+
+sigma_bending_Pa,tau_torsion_Pa,von_mises_equivalent_Pa
+188628080.701506,22635369.6841807,192659369.643296

@@ -1,0 +1,52 @@
+# -*- coding: mbcs -*-
+#
+# Abaqus/CAE Release 2026 replay file
+# Internal Version: 2025_09_23-22.43.03 RELr428 206049
+# Run by zxj on Wed Jun  3 10:50:05 2026
+#
+
+# from driverUtils import executeOnCaeGraphicsStartup
+# executeOnCaeGraphicsStartup()
+#: Executing "onCaeGraphicsStartup()" in the site directory ...
+from abaqus import *
+from abaqusConstants import *
+session.Viewport(name='Viewport: 1', origin=(1.11979, 1.11979), width=164.833, 
+    height=111.083)
+session.viewports['Viewport: 1'].makeCurrent()
+from driverUtils import executeOnCaeStartup
+executeOnCaeStartup()
+#: Executing "onCaeStartup()" in the home directory ...
+#: =======================================================
+#: Abaqus MCP Plugin v4.0.0 (File IPC)
+#: =======================================================
+#: Home:   D:\mcp
+#: Abaqus: True
+#: Start:  mcp_start()     (background, recommended)
+#:         mcp_loop()      (blocking)
+#: Stop:   mcp_stop()
+#: Status: mcp_status()
+#: =======================================================
+execfile('C:/Users/86198/Desktop/task9/task9_abaqus_model.py', 
+    __main__.__dict__)
+#: The model "Task9_Rectangular_Plate_Tension" has been created.
+#: The model database has been saved to "C:\Users\86198\Desktop\task9\task9_rect_plate_tension.cae".
+#: Model: C:/Users/86198/Desktop/task9/task9_rect_plate_tension.odb
+#: Number of Assemblies:         1
+#: Number of Assembly instances: 0
+#: Number of Part instances:     1
+#: Number of Meshes:             1
+#: Number of Element Sets:       4
+#: Number of Node Sets:          13
+#: Number of Steps:              1
+#* TypeError: a bytes-like object is required, not 'str'
+#* File "C:/Users/86198/Desktop/task9/task9_abaqus_model.py", line 372, in 
+#* <module>
+#*     main()
+#* File "C:/Users/86198/Desktop/task9/task9_abaqus_model.py", line 366, in main
+#*     summary = process_results(total_force)
+#* File "C:/Users/86198/Desktop/task9/task9_abaqus_model.py", line 253, in 
+#* process_results
+#*     write_csv(
+#* File "C:/Users/86198/Desktop/task9/task9_abaqus_model.py", line 58, in 
+#* write_csv
+#*     writer.writerow(header)

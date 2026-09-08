@@ -1,0 +1,157 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.Model(name='Task7_Axial_Bar_2Elem')
+mdb.models['Task7_Axial_Bar_2Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Bar_1D_T2D2', type=DEFORMABLE_BODY)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Node(coordinates=(0.0, 
+    0.0, 0.0), label=1)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Node(coordinates=(
+    500.0, 0.0, 0.0), label=2)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Node(coordinates=(
+    1000.0, 0.0, 0.0), label=3)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Element(elemShape=
+    LINE2, label=1, nodes=(
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[0], 
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[1]))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Element(elemShape=
+    LINE2, label=2, nodes=(
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[1], 
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[2]))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='ALL_NODES', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#7 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='LEFT_NODE', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='MID_NODE', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='RIGHT_NODE', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#4 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(elements=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].elements.getSequenceFromMask(
+    mask=('[#3 ]', ), ), name='ALL_ELEMS')
+mdb.models['Task7_Axial_Bar_2Elem'].Material(name='Steel_E200GPa')
+mdb.models['Task7_Axial_Bar_2Elem'].materials['Steel_E200GPa'].Elastic(table=((
+    200000.0, 0.3), ))
+mdb.models['Task7_Axial_Bar_2Elem'].TrussSection(area=100.0, material=
+    'Steel_E200GPa', name='BarSection')
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].SectionAssignment(
+    region=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].sets['ALL_ELEMS'], 
+    sectionName='BarSection')
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=500.0)
+del mdb.models['Task7_Axial_Bar_2Elem']
+mdb.Model(name='Task7_Axial_Bar_2Elem')
+mdb.models['Task7_Axial_Bar_2Elem'].Part(dimensionality=TWO_D_PLANAR, name=
+    'Bar_1D_T2D2', type=DEFORMABLE_BODY)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Node(coordinates=(0.0, 
+    0.0, 0.0), label=1)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Node(coordinates=(
+    500.0, 0.0, 0.0), label=2)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Node(coordinates=(
+    1000.0, 0.0, 0.0), label=3)
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Element(elemShape=
+    LINE2, label=1, nodes=(
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[0], 
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[1]))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Element(elemShape=
+    LINE2, label=2, nodes=(
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[1], 
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes[2]))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='ALL_NODES', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#7 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='LEFT_NODE', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='MID_NODE', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(name='RIGHT_NODE', 
+    nodes=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].nodes.getSequenceFromMask(
+    mask=('[#4 ]', ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].Set(elements=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].elements.getSequenceFromMask(
+    mask=('[#3 ]', ), ), name='ALL_ELEMS')
+mdb.models['Task7_Axial_Bar_2Elem'].Material(name='Steel_E200GPa')
+mdb.models['Task7_Axial_Bar_2Elem'].materials['Steel_E200GPa'].Elastic(table=((
+    200000.0, 0.3), ))
+mdb.models['Task7_Axial_Bar_2Elem'].TrussSection(area=100.0, material=
+    'Steel_E200GPa', name='BarSection')
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].SectionAssignment(
+    region=
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].sets['ALL_ELEMS'], 
+    sectionName='BarSection')
+mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].setElementType(
+    elemTypes=(ElemType(elemCode=T2D2, elemLibrary=STANDARD), ), regions=(
+    mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'].elements.getSequenceFromMask(
+    mask=('[#3 ]', ), ), ))
+mdb.models['Task7_Axial_Bar_2Elem'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Task7_Axial_Bar_2Elem'].rootAssembly.Instance(dependent=ON, name=
+    'Bar-1', part=mdb.models['Task7_Axial_Bar_2Elem'].parts['Bar_1D_T2D2'])
+mdb.models['Task7_Axial_Bar_2Elem'].StaticStep(name='Axial_Load', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['Task7_Axial_Bar_2Elem'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('S', 'E', 'U', 'RF', 'CF'))
+mdb.models['Task7_Axial_Bar_2Elem'].DisplacementBC(amplitude=UNSET, 
+    createStepName='Initial', distributionType=UNIFORM, fieldName='', 
+    localCsys=None, name='Left_axial_fixed', region=
+    mdb.models['Task7_Axial_Bar_2Elem'].rootAssembly.instances['Bar-1'].sets['LEFT_NODE']
+    , u1=0.0, u2=0.0, ur3=UNSET)
+mdb.models['Task7_Axial_Bar_2Elem'].DisplacementBC(amplitude=UNSET, 
+    createStepName='Initial', distributionType=UNIFORM, fieldName='', 
+    localCsys=None, name='Suppress_transverse_motion', region=
+    mdb.models['Task7_Axial_Bar_2Elem'].rootAssembly.instances['Bar-1'].sets['ALL_NODES']
+    , u1=UNSET, u2=0.0, ur3=UNSET)
+mdb.models['Task7_Axial_Bar_2Elem'].ConcentratedForce(cf1=5000.0, 
+    createStepName='Axial_Load', name='Eq_dist_load_left', region=
+    mdb.models['Task7_Axial_Bar_2Elem'].rootAssembly.instances['Bar-1'].sets['LEFT_NODE'])
+mdb.models['Task7_Axial_Bar_2Elem'].ConcentratedForce(cf1=10000.0, 
+    createStepName='Axial_Load', name='Eq_dist_load_mid', region=
+    mdb.models['Task7_Axial_Bar_2Elem'].rootAssembly.instances['Bar-1'].sets['MID_NODE'])
+mdb.models['Task7_Axial_Bar_2Elem'].ConcentratedForce(cf1=1005000.0, 
+    createStepName='Axial_Load', name='Right_P_plus_dist', region=
+    mdb.models['Task7_Axial_Bar_2Elem'].rootAssembly.instances['Bar-1'].sets['RIGHT_NODE'])
+mdb.Job(description=
+    'Task 7 axial bar: L=1000 mm, E=200000 N/mm2, A=100 mm2, two T2D2 elements, equivalent nodal distributed load.'
+    , model='Task7_Axial_Bar_2Elem', name='Task7_Axial_Bar_2Elem')
+# Save by zxj on 2026_05_25-10.23.31; build 2026 2025_09_23-22.43.03 RELr428 206049
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['Task7_Axial_Bar_2Elem'].submit(consistencyChecking=False)
+mdb.jobs['Task7_Axial_Bar_2Elem'].waitForCompletion()
+# Save by zxj on 2026_05_25-10.50.26; build 2026 2025_09_23-22.43.03 RELr428 206049

@@ -1,0 +1,12 @@
+Example D spatial bending-torsion cantilever
+L = 1 m
+d = 0.03 m
+E = 210000000000 Pa
+G = 80000000000 Pa
+nu = 0.3125
+A = 0.000706858347058 m^2
+Iy = 3.9760782022e-08 m^4
+Iz = 3.9760782022e-08 m^4
+J = 7.9521564044e-08 m^4
+P = 500 N
+T = 120 N*m

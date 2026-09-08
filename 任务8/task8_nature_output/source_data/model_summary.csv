@@ -1,0 +1,10 @@
+"parameter","value"
+"L_m",1
+"H_m",0.4
+"t_m",0.01
+"E_Pa",2.1e+11
+"nu",0.3
+"q_Pa",1e+08
+"max_sigma_x_fixed_MPa",128.546577380952
+"max_abs_sigma_y_fixed_MPa",24.0568973214286
+"max_abs_tau_xy_fixed_MPa",8.97818877301484

@@ -1,0 +1,473 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.Model(name='ExampleC_SpaceFrame')
+mdb.models['ExampleC_SpaceFrame'].ConstrainedSketch(name='__profile__', 
+    sheetSize=5.0)
+mdb.models['ExampleC_SpaceFrame'].sketches['__profile__'].Line(point1=(0.0, 
+    0.0), point2=(0.0, 1.0))
+mdb.models['ExampleC_SpaceFrame'].Part(dimensionality=THREE_D, name=
+    'SpaceFrame', type=DEFORMABLE_BODY)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame'].BaseWire(sketch=
+    mdb.models['ExampleC_SpaceFrame'].sketches['__profile__'])
+del mdb.models['ExampleC_SpaceFrame'].sketches['__profile__']
+mdb.models['ExampleC_SpaceFrame'].Part(dimensionality=THREE_D, name=
+    'SpaceFrame3D', type=DEFORMABLE_BODY)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].WirePolyLine(mergeType=
+    IMPRINT, meshable=ON, points=(((0.0, 0.0, 0.0), (0.0, 0.0, 1.0)), ((0.0, 
+    0.0, 1.0), (1.2, 0.8, 1.0))))
+del mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame']
+mdb.models['ExampleC_SpaceFrame'].Material(name='Steel_E210_G80')
+mdb.models['ExampleC_SpaceFrame'].materials['Steel_E210_G80'].Elastic(table=((
+    210000000000.0, 0.3125), ))
+mdb.models['ExampleC_SpaceFrame'].CircularProfile(name='Circle_d30mm', r=0.015)
+mdb.models['ExampleC_SpaceFrame'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210_G80', name=
+    'CircularBeamSection', poissonRatio=0.3125, profile='Circle_d30mm', 
+    temperatureVar=LINEAR)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), )), sectionName='CircularBeamSection', 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].assignBeamSectionOrientation(
+    method=N1_COSINES, n1=(0.0, 1.0, 0.0), region=Region(
+    edges=mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), )))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Instance(dependent=ON, name=
+    'SpaceFrame3D-1', part=
+    mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'])
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(name='NODE1_FIXED', 
+    vertices=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].vertices.getSequenceFromMask(
+    mask=('[#4 ]', ), ))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(name='NODE2', vertices=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(name='NODE3_LOAD', vertices=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(edges=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), ), name='ALL_BEAMS')
+mdb.models['ExampleC_SpaceFrame'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['ExampleC_SpaceFrame'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_Node1', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE1_FIXED'], u1=0.0, 
+    u2=0.0, u3=0.0, ur1=0.0, ur2=0.0, ur3=0.0)
+mdb.models['ExampleC_SpaceFrame'].ConcentratedForce(cf2=-800.0, createStepName=
+    'LoadStep', name='Fy_minus800N_Node3', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE3_LOAD'])
+mdb.models['ExampleC_SpaceFrame'].Moment(cm1=150.0, createStepName='LoadStep', 
+    name='Mx_150Nm_Node3', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE3_LOAD'])
+mdb.models['ExampleC_SpaceFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='Node2_U_R', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE2'], variables=(
+    'U1', 'U2', 'U3', 'UR1', 'UR2', 'UR3'))
+mdb.models['ExampleC_SpaceFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='Node3_U_R', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE3_LOAD'], 
+    variables=('U1', 'U2', 'U3', 'UR1', 'UR2', 'UR3'))
+mdb.models['ExampleC_SpaceFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='Node1_RF_RM', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE1_FIXED'], 
+    variables=('RF1', 'RF2', 'RF3', 'RM1', 'RM2', 'RM3'))
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=2.0)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].setElementType(
+    elemTypes=(ElemType(elemCode=B31, elemLibrary=STANDARD), ), regions=(
+    mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), ), ))
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].generateMesh()
+mdb.Job(description='Task 6 Example C: three-node, two-element 3D space frame', 
+    model='ExampleC_SpaceFrame', name='ExampleC_SpaceFrame', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.regenerate()
+mdb.jobs['ExampleC_SpaceFrame'].submit(consistencyChecking=False)
+mdb.jobs['ExampleC_SpaceFrame'].waitForCompletion()
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].deleteMesh()
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.2)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].generateMesh()
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].generateMesh()
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].deleteMesh()
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.1)
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.regenerate()
+mdb.models['ExampleC_SpaceFrame'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('CDISP', 'CF', 'CSTRESS', 'LE', 'PE', 'PEEQ', 'PEMAG', 'RF', 
+    'S', 'U', 'SF'))
+mdb.models['ExampleC_SpaceFrame'].fieldOutputRequests['F-Output-1'].setValues(
+    variables=('CDISP', 'CF', 'CSTRESS', 'LE', 'PE', 'PEEQ', 'PEMAG', 'RF', 
+    'S', 'SF', 'U'))
+mdb.jobs['ExampleC_SpaceFrame'].submit(consistencyChecking=OFF)
+mdb.jobs['ExampleC_SpaceFrame']._Message(STARTED, {'phase': BATCHPRE_PHASE, 
+    'jobName': 'ExampleC_SpaceFrame', 'clientHost': 'satoru', 'handle': 0})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *CLOAD, file "ExampleC_SpaceFrame.inp", line 49: Unknown assembly set NODE3_LOAD', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *CLOAD, file "ExampleC_SpaceFrame.inp", line 52: Unknown assembly set NODE3_LOAD', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *NODEOUTPUT, file "ExampleC_SpaceFrame.inp", line 70: Unknown assembly set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *NODEOUTPUT, file "ExampleC_SpaceFrame.inp", line 75: Unknown assembly set NODE2', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *NODEOUTPUT, file "ExampleC_SpaceFrame.inp", line 80: Unknown assembly set NODE3_LOAD', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(HEADING, {
+    'heading': 'Task 6 Example C: three-node, two-element 3D space frame', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'THIS MODEL HAS EITHER INCORRECT OR NO ELEMENT DEFINITIONS.', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ABORTED, {
+    'message': 'Analysis phase failed due to errors', 'phase': BATCHPRE_PHASE, 
+    'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'Analysis Input File Processor exited with an error - Please see the  ExampleC_SpaceFrame.dat file for possible error messages if the file exists.', 
+    'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(JOB_ABORTED, {
+    'message': 'Analysis Input File Processor exited with an error - Please see the  ExampleC_SpaceFrame.dat file for possible error messages if the file exists.', 
+    'jobName': 'ExampleC_SpaceFrame'})
+del mdb.models['ExampleC_SpaceFrame'].historyOutputRequests['Node2_U_R']
+del mdb.models['ExampleC_SpaceFrame'].historyOutputRequests['Node3_U_R']
+mdb.jobs['ExampleC_SpaceFrame'].submit(consistencyChecking=OFF)
+mdb.jobs['ExampleC_SpaceFrame']._Message(STARTED, {'phase': BATCHPRE_PHASE, 
+    'jobName': 'ExampleC_SpaceFrame', 'clientHost': 'satoru', 'handle': 0})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *BOUNDARY, file "ExampleC_SpaceFrame.inp", line 31: Unknown assembly node set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *CLOAD, file "ExampleC_SpaceFrame.inp", line 49: Unknown assembly set NODE3_LOAD', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *CLOAD, file "ExampleC_SpaceFrame.inp", line 52: Unknown assembly set NODE3_LOAD', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'in keyword *NODEOUTPUT, file "ExampleC_SpaceFrame.inp", line 70: Unknown assembly set NODE1_FIXED', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(HEADING, {
+    'heading': 'Task 6 Example C: three-node, two-element 3D space frame', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'THIS MODEL HAS EITHER INCORRECT OR NO ELEMENT DEFINITIONS.', 
+    'phase': BATCHPRE_PHASE, 'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ABORTED, {
+    'message': 'Analysis phase failed due to errors', 'phase': BATCHPRE_PHASE, 
+    'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(ERROR, {
+    'message': 'Analysis Input File Processor exited with an error - Please see the  ExampleC_SpaceFrame.dat file for possible error messages if the file exists.', 
+    'jobName': 'ExampleC_SpaceFrame'})
+mdb.jobs['ExampleC_SpaceFrame']._Message(JOB_ABORTED, {
+    'message': 'Analysis Input File Processor exited with an error - Please see the  ExampleC_SpaceFrame.dat file for possible error messages if the file exists.', 
+    'jobName': 'ExampleC_SpaceFrame'})
+mdb.models['ExampleC_SpaceFrame'].keywordBlock.synchVersions(
+    storeNodesAndElements=False)
+mdb.models['ExampleC_SpaceFrame'].keywordBlock.insert(26, 
+    '*Element Output, directions=YES\nSF, SM')
+mdb.Job(description=
+    'Example C with beam section force SF and section moment SM field output', 
+    model='ExampleC_SpaceFrame', name='ExampleC_SpaceFrame_SFSM', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['ExampleC_SpaceFrame_SFSM'].submit(consistencyChecking=False)
+mdb.jobs['ExampleC_SpaceFrame_SFSM'].waitForCompletion()
+mdb.models['ExampleC_SpaceFrame'].keywordBlock.synchVersions(
+    storeNodesAndElements=True)
+del mdb.jobs['ExampleC_SpaceFrame_SFSM']
+mdb.Job(description='Example C with SF and SM output', model=
+    'ExampleC_SpaceFrame', name='ExampleC_SpaceFrame_SFSM', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['ExampleC_SpaceFrame_SFSM'].submit(consistencyChecking=False)
+mdb.jobs['ExampleC_SpaceFrame_SFSM'].waitForCompletion()
+del mdb.jobs['ExampleC_SpaceFrame']
+del mdb.jobs['ExampleC_SpaceFrame_SFSM']
+del mdb.models['ExampleC_SpaceFrame']
+mdb.Model(name='ExampleC_SpaceFrame')
+mdb.models['ExampleC_SpaceFrame'].Part(dimensionality=THREE_D, name=
+    'SpaceFrame3D', type=DEFORMABLE_BODY)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].WirePolyLine(mergeType=
+    IMPRINT, meshable=ON, points=(((0.0, 0.0, 0.0), (0.0, 0.0, 1.0)), ((0.0, 
+    0.0, 1.0), (1.2, 0.8, 1.0))))
+mdb.models['ExampleC_SpaceFrame'].Material(name='Steel_E210_G80')
+mdb.models['ExampleC_SpaceFrame'].materials['Steel_E210_G80'].Elastic(table=((
+    210000000000.0, 0.3125), ))
+mdb.models['ExampleC_SpaceFrame'].CircularProfile(name='Circle_d30mm', r=0.015)
+mdb.models['ExampleC_SpaceFrame'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210_G80', name=
+    'CircularBeamSection', poissonRatio=0.3125, profile='Circle_d30mm', 
+    temperatureVar=LINEAR)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), )), sectionName='CircularBeamSection', 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].assignBeamSectionOrientation(
+    method=N1_COSINES, n1=(0.0, 1.0, 0.0), region=Region(
+    edges=mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), )))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Instance(dependent=ON, name=
+    'SpaceFrame3D-1', part=
+    mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'])
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(name='NODE1_FIXED', 
+    vertices=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].vertices.getSequenceFromMask(
+    mask=('[#4 ]', ), ))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(name='NODE2', vertices=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(name='NODE3_LOAD', vertices=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleC_SpaceFrame'].rootAssembly.Set(edges=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.instances['SpaceFrame3D-1'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), ), name='ALL_BEAMS')
+mdb.models['ExampleC_SpaceFrame'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['ExampleC_SpaceFrame'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_Node1', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE1_FIXED'], u1=0.0, 
+    u2=0.0, u3=0.0, ur1=0.0, ur2=0.0, ur3=0.0)
+mdb.models['ExampleC_SpaceFrame'].ConcentratedForce(cf2=-800.0, createStepName=
+    'LoadStep', name='Fy_minus800N_Node3', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE3_LOAD'])
+mdb.models['ExampleC_SpaceFrame'].Moment(cm1=150.0, createStepName='LoadStep', 
+    name='Mx_150Nm_Node3', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE3_LOAD'])
+mdb.models['ExampleC_SpaceFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='Node1_RF_RM', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE1_FIXED'], 
+    variables=('RF1', 'RF2', 'RF3', 'RM1', 'RM2', 'RM3'))
+mdb.models['ExampleC_SpaceFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='Node2_U_R', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE2'], variables=(
+    'U1', 'U2', 'U3', 'UR1', 'UR2', 'UR3'))
+mdb.models['ExampleC_SpaceFrame'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='Node3_U_R', region=
+    mdb.models['ExampleC_SpaceFrame'].rootAssembly.sets['NODE3_LOAD'], 
+    variables=('U1', 'U2', 'U3', 'UR1', 'UR2', 'UR3'))
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=2.0)
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].setElementType(
+    elemTypes=(ElemType(elemCode=B31, elemLibrary=STANDARD), ), regions=(
+    mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].edges.getSequenceFromMask(
+    mask=('[#3 ]', ), ), ))
+mdb.models['ExampleC_SpaceFrame'].parts['SpaceFrame3D'].generateMesh()
+mdb.models['ExampleC_SpaceFrame'].keywordBlock.synchVersions(
+    storeNodesAndElements=True)
+mdb.models['ExampleC_SpaceFrame'].keywordBlock.insert(37, 
+    '*Element Output, directions=YES\nSF, SM')
+mdb.Job(description='Example C with CF CM E RF RM S U UR SF SM field output', 
+    model='ExampleC_SpaceFrame', name='ExampleC_SpaceFrame_SFSM', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['ExampleC_SpaceFrame_SFSM'].submit(consistencyChecking=False)
+mdb.jobs['ExampleC_SpaceFrame_SFSM'].waitForCompletion()
+mdb.Model(name='ExampleD_BendingTorsion')
+mdb.models['ExampleD_BendingTorsion'].Part(dimensionality=THREE_D, name=
+    'CircularCantilever', type=DEFORMABLE_BODY)
+mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].WirePolyLine(
+    mergeType=IMPRINT, meshable=ON, points=(((0.0, 0.0, 0.0), (1.0, 0.0, 0.0)), 
+    ))
+mdb.models['ExampleD_BendingTorsion'].Material(name='Steel_E210_G80')
+mdb.models['ExampleD_BendingTorsion'].materials['Steel_E210_G80'].Elastic(
+    table=((210000000000.0, 0.3125), ))
+mdb.models['ExampleD_BendingTorsion'].CircularProfile(name='Circle_d30mm', r=
+    0.015)
+mdb.models['ExampleD_BendingTorsion'].BeamSection(consistentMassMatrix=False, 
+    integration=DURING_ANALYSIS, material='Steel_E210_G80', name=
+    'CircularBeamSection', poissonRatio=0.3125, profile='Circle_d30mm', 
+    temperatureVar=LINEAR)
+mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].SectionAssignment(
+    offset=0.0, offsetField='', offsetType=MIDDLE_SURFACE, region=Region(
+    edges=mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )), sectionName='CircularBeamSection', 
+    thicknessAssignment=FROM_SECTION)
+mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].assignBeamSectionOrientation(
+    method=N1_COSINES, n1=(0.0, 1.0, 0.0), region=Region(
+    edges=mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), )))
+mdb.models['ExampleD_BendingTorsion'].rootAssembly.DatumCsysByDefault(
+    CARTESIAN)
+mdb.models['ExampleD_BendingTorsion'].rootAssembly.Instance(dependent=ON, name=
+    'CircularCantilever-1', part=
+    mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'])
+mdb.models['ExampleD_BendingTorsion'].rootAssembly.Set(name='FIXED_END', 
+    vertices=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.instances['CircularCantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#1 ]', ), ))
+mdb.models['ExampleD_BendingTorsion'].rootAssembly.Set(name='FREE_END', 
+    vertices=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.instances['CircularCantilever-1'].vertices.getSequenceFromMask(
+    mask=('[#2 ]', ), ))
+mdb.models['ExampleD_BendingTorsion'].rootAssembly.Set(edges=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.instances['CircularCantilever-1'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), name='BEAM')
+mdb.models['ExampleD_BendingTorsion'].StaticStep(name='LoadStep', nlgeom=OFF, 
+    previous='Initial')
+mdb.models['ExampleD_BendingTorsion'].DisplacementBC(createStepName='Initial', 
+    name='Fixed_Left_End', region=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.sets['FIXED_END'], u1=
+    0.0, u2=0.0, u3=0.0, ur1=0.0, ur2=0.0, ur3=0.0)
+mdb.models['ExampleD_BendingTorsion'].ConcentratedForce(cf2=-500.0, 
+    createStepName='LoadStep', name='Transverse_Load_P_500N', region=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleD_BendingTorsion'].Moment(cm1=120.0, createStepName=
+    'LoadStep', name='Torsion_T_120Nm', region=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.sets['FREE_END'])
+mdb.models['ExampleD_BendingTorsion'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='FreeEnd_U_R', region=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.sets['FREE_END'], 
+    variables=('U1', 'U2', 'U3', 'UR1', 'UR2', 'UR3'))
+mdb.models['ExampleD_BendingTorsion'].HistoryOutputRequest(createStepName=
+    'LoadStep', name='FixedEnd_RF_RM', region=
+    mdb.models['ExampleD_BendingTorsion'].rootAssembly.sets['FIXED_END'], 
+    variables=('RF1', 'RF2', 'RF3', 'RM1', 'RM2', 'RM3'))
+mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].seedPart(
+    deviationFactor=0.1, minSizeFactor=0.1, size=0.125)
+mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].setElementType(
+    elemTypes=(ElemType(elemCode=B31, elemLibrary=STANDARD), ), regions=(
+    mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].edges.getSequenceFromMask(
+    mask=('[#1 ]', ), ), ))
+mdb.models['ExampleD_BendingTorsion'].parts['CircularCantilever'].generateMesh(
+    )
+mdb.models['ExampleD_BendingTorsion'].keywordBlock.synchVersions(
+    storeNodesAndElements=True)
+mdb.models['ExampleD_BendingTorsion'].keywordBlock.insert(36, 
+    '*Element Output, directions=YES\nSF, SM')
+mdb.Job(description=
+    'Task 6 Example D: spatial bending-torsion circular cantilever', model=
+    'ExampleD_BendingTorsion', name='ExampleD_BendingTorsion', numCpus=1, 
+    numDomains=1, type=ANALYSIS)
+# Save by zxj on 2026_05_21-01.25.58; build 2026 2025_09_23-22.43.03 RELr428 206049
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['ExampleD_BendingTorsion'].submit(consistencyChecking=False)
+mdb.jobs['ExampleD_BendingTorsion'].waitForCompletion()
+# Save by zxj on 2026_05_21-01.43.21; build 2026 2025_09_23-22.43.03 RELr428 206049
