@@ -44,7 +44,7 @@ The Word reports in `任务8/task8_nature_output/` and `有限元/` contain the 
 - 295 embedded image occurrences recorded;
 - 128 content-unique images uploaded under [`docs/report-images/`](docs/report-images/);
 - complete mapping in [`REPORT_IMAGE_MANIFEST.csv`](docs/REPORT_IMAGE_MANIFEST.csv);
-- full visual gallery at [`docs/report-gallery.html`](docs/report-gallery.html).
+- full visual gallery at [the GitHub Pages report gallery](https://satoru-1006.github.io/finite-element-structural-simulation/report-gallery.html).
 
 <p align="center">
   <img src="docs/report-images/embedded_001.png" alt="Task 8 geometry, boundary conditions and analytical workflow" width="24%" />
