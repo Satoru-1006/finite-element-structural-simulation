@@ -36,6 +36,25 @@ The most complete research-style case is Task 9: a rectangular plate under tensi
 
 These values are transcribed from `task9/results_summary.json`. They describe the saved numerical model and its comparison baseline; they are not a claim of experimental or production validation.
 
+## Word-report embedded figures
+
+The Word reports in `任务8/task8_nature_output/` and `有限元/` contain the original inserted figures used during report construction. I extracted the package media streams, removed only exact content duplicates across report revisions, and preserved the source-document mapping:
+
+- 23 valid Word documents inspected;
+- 295 embedded image occurrences recorded;
+- 128 content-unique images uploaded under [`docs/report-images/`](docs/report-images/);
+- complete mapping in [`REPORT_IMAGE_MANIFEST.csv`](docs/REPORT_IMAGE_MANIFEST.csv);
+- full visual gallery at [`docs/report-gallery.html`](docs/report-gallery.html).
+
+<p align="center">
+  <img src="docs/report-images/embedded_001.png" alt="Task 8 geometry, boundary conditions and analytical workflow" width="24%" />
+  <img src="docs/report-images/embedded_002.png" alt="Task 8 uniform displacement and strain fields" width="24%" />
+  <img src="docs/report-images/embedded_003.png" alt="Task 8 fixed-end displacement and stress fields" width="24%" />
+  <img src="docs/report-images/embedded_004.png" alt="Task 8 disturbance decay and stress metrics" width="24%" />
+</p>
+
+These are the actual images embedded in the Word reports, not newly generated placeholders. The project homepage includes a curated selection; the gallery exposes the full extracted set.
+
 ## Research questions and evidence chain
 
 The archive is organized around a repeatable mechanics workflow:
@@ -134,4 +153,3 @@ If you use this archive in teaching, a report or a research note, cite the repos
 ## Author and status
 
 Maintained by **Satoru-1006** as an auditable finite-element and structural-simulation research archive. The repository is a study and computation record; it is not presented as a peer-reviewed publication or a hardware qualification package.
-

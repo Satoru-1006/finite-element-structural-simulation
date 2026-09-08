@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Figures extracted from the finite-element Word reports." />
+  <title>Embedded Report Figures · Finite Element Archive</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href=".">FE / STRUCTURES <span>·</span> REPORT FIGURES</a>
+    <nav>
+      <a href="index.html">Showcase</a>
+      <a href="https://github.com/Satoru-1006/finite-element-structural-simulation">Repository</a>
+    </nav>
+  </header>
+
+  <main class="shell gallery-page">
+    <section class="gallery-hero">
+      <p class="eyebrow">WORD-PACKAGE MEDIA · DEDUPLICATED ARCHIVE</p>
+      <h1>Figures that survived<br /><em>the report revisions.</em></h1>
+      <p class="lede">These are the actual images embedded inside the Word reports found in the Task 8 Nature output and the broader finite-element document set.</p>
+      <p class="lede zh">按图片内容哈希去重，保留每一张图的原始文档来源。</p>
+      <div class="gallery-stat"><strong id="count">Loading…</strong><span>unique embedded figures</span></div>
+    </section>
+
+    <section class="gallery-grid" id="gallery" aria-live="polite">
+      <p class="gallery-loading">Loading the embedded-image index…</p>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <span><a class="text-link" href="REPORT_IMAGE_MANIFEST.md">Open the source manifest ↗</a></span>
+    <span>Finite Element & Structural Simulation Archive · 2026</span>
+  </footer>
+
+  <script>
+    const gallery = document.getElementById('gallery');
+    const count = document.getElementById('count');
+
+    function text(value) {
+      return document.createTextNode(value || '');
+    }
+
+    fetch('report-image-index.json')
+      .then(response => {
+        if (!response.ok) throw new Error(`Index request failed: ${response.status}`);
+        return response.json();
+      })
+      .then(items => {
+        count.textContent = items.length;
+        gallery.replaceChildren();
+        for (const item of items) {
+          const card = document.createElement('figure');
+          card.className = 'gallery-card';
+          const link = document.createElement('a');
+          link.href = `report-images/${encodeURIComponent(item.asset)}`;
+          link.target = '_blank';
+          link.rel = 'noopener';
+          const image = document.createElement('img');
+          image.src = `report-images/${encodeURIComponent(item.asset)}`;
+          image.alt = `Embedded report figure ${item.asset}`;
+          image.loading = 'lazy';
+          image.decoding = 'async';
+          link.appendChild(image);
+          const caption = document.createElement('figcaption');
+          const file = document.createElement('strong');
+          file.appendChild(text(item.asset));
+          const source = document.createElement('span');
+          source.appendChild(text(item.source_document));
+          const countLine = document.createElement('small');
+          countLine.appendChild(text(`${item.occurrences} source occurrence${item.occurrences === 1 ? '' : 's'} · ${item.bytes.toLocaleString()} bytes`));
+          caption.append(file, source, countLine);
+          card.append(link, caption);
+          gallery.appendChild(card);
+        }
+      })
+      .catch(error => {
+        count.textContent = 'Unavailable';
+        gallery.replaceChildren();
+        const message = document.createElement('p');
+        message.className = 'gallery-loading';
+        message.appendChild(text(error.message));
+        gallery.appendChild(message);
+      });
+  </script>
+</body>
+</html>
+
